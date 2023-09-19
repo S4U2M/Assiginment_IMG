@@ -25,7 +25,6 @@ class SearchAdapter(
         override fun areContentsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
             return oldItem == newItem
         }
-
     }
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

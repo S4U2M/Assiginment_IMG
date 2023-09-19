@@ -1,5 +1,6 @@
 package com.example.assignmnet_img.search
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -43,12 +44,11 @@ class SearchFragment : Fragment() {
     private val searchAdapter by lazy {
         SearchAdapter(
             onLongClickItem = { item ->
-                updateItem(item)
+
+                alterDialog(item)
                 Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
-                Toast.makeText(context, "북마크에 저장되었습니다.", Toast.LENGTH_SHORT).show()
             }
         )
-
     }
 
     private val viewModel: SearchViewModel by lazy {
@@ -174,6 +174,21 @@ class SearchFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun alterDialog(item: SearchModel){
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("북마크")
+        builder.setMessage("북마크에 추가하시겠습니까?")
+        builder.setNegativeButton("예") { _, _ ->
+            updateItem(item)
+            Toast.makeText(context, "북마크에 저장되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        builder.setPositiveButton("아니오") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
 }

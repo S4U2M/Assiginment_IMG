@@ -1,17 +1,22 @@
 package com.example.assignmnet_img.bookmark
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignmnet_img.R
 import com.example.assignmnet_img.databinding.BookMarkFragmentBinding
 import com.example.assignmnet_img.main.SharedViewModel
+import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.dataclass.toBookmarkModel
+import java.util.concurrent.atomic.AtomicLong
 
 
 class BookMarkFragment : Fragment() {
@@ -25,7 +30,12 @@ class BookMarkFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val bookMarkAdapter by lazy {
-        BookMarkAdapter()
+        BookMarkAdapter(
+            onLongClickItem = { item ->
+                alterDialog(item)
+            }
+
+        )
     }
 
     private val bookmarkViewModel by lazy {
@@ -52,6 +62,7 @@ class BookMarkFragment : Fragment() {
 
     private fun initView() = with(binding) {
         bookmarkRcList.adapter = bookMarkAdapter
+        bookmarkRcList.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
     private fun initViewModel() = with(bookmarkViewModel) {
@@ -68,6 +79,21 @@ class BookMarkFragment : Fragment() {
 
             addModel(updateBookmarkModel)
         }
+    }
+
+    private fun alterDialog(item: BookmarkModel) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("삭제")
+        builder.setMessage("북마크에서 삭제하시겠습니까?")
+        builder.setNegativeButton("예") { _, _ ->
+            bookmarkViewModel.removeItem(item)
+            Toast.makeText(context, "북마크에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        builder.setPositiveButton("아니오") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
 

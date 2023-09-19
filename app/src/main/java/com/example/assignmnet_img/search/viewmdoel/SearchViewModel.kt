@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
-class SearchViewModel(): ViewModel() {
+class SearchViewModel() : ViewModel() {
 
-    private val _searchList : MutableLiveData<List<SearchModel>> = MutableLiveData()
-    val searchList : LiveData<List<SearchModel>> get() = _searchList
+    private val _searchList: MutableLiveData<List<SearchModel>> = MutableLiveData()
+    val searchList: LiveData<List<SearchModel>> get() = _searchList
 
-
-    fun getList(list:List<SearchModel>){
+    fun getList(list: List<SearchModel>) {
         var currentList = searchList.value.orEmpty().toMutableList()
         currentList.clear()
         currentList = list.toMutableList()
         _searchList.value = currentList
-
     }
+
 }
