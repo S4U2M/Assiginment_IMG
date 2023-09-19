@@ -6,6 +6,8 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.assignmnet_img.R
 import com.example.assignmnet_img.databinding.SearchItemBinding
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
@@ -38,8 +40,11 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: SearchModel) = with(binding) {
+
+            searchItemImg.setImageURI(item.imageUrl.toUri())
             searchItemDate.text = item.datetime
             searchItemTitle.text = item.displaySiteName
+
         }
     }
 }
