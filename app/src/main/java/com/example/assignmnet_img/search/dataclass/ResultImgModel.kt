@@ -1,11 +1,11 @@
 package com.example.assignmnet_img.search.dataclass
 
 
-data class ImgResultModel(
+data class ResultImgModel(
     val imageUrl: String,
     val datetime: String,
     val displaySiteName: String
 )
-data class SearchResult(
-    val result:List<ImgResultModel>
+data class SearchResultIMG(
+    val result:List<ResultImgModel>
 )
