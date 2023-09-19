@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private fun initView() = with(binding) {
 
         mainViewpager2.adapter = viewPagerAdapter
+        mainViewpager2.offscreenPageLimit = 1
 
         TabLayoutMediator(mainTab,mainViewpager2){tab,position->
             tab.setText(viewPagerAdapter.getTitle(position))
