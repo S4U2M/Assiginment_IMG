@@ -72,7 +72,7 @@ class SearchFragment : Fragment() {
         @GET("v2/search/image")
         fun searchImage(
             @Header("Authorization") apiKey: String = API_KEY,
-            @Query("query") query: String,
+            @Query("query") query: String
         ): Call<SearchResultIMG>
     }
 
@@ -101,7 +101,7 @@ class SearchFragment : Fragment() {
            }
 
            override fun onFailure(call: Call<SearchResultIMG>, t: Throwable) {
-               TODO("Not yet implemented")
+               Log.d("Test","통신실패")
            }
 
        })
