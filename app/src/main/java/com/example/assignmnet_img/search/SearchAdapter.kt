@@ -36,7 +36,8 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
         holder.bind(item)
     }
 
-    class ViewHolder(private val binding: SearchItemBinding
+    class ViewHolder(
+        private val binding: SearchItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: SearchModel) = with(binding) {
