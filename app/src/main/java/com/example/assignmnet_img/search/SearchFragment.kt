@@ -21,7 +21,7 @@ class SearchFragment : Fragment() {
     }
 
     private var _binding: SearchFragmentBinding? = null
-    private val binding = _binding!!
+    private val binding get()= _binding!!
 
     private val searchAdapter by lazy {
         SearchAdapter()
@@ -30,19 +30,17 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by lazy {
         ViewModelProvider(this)[SearchViewModel::class.java]
     }
-
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        _binding = SearchFragmentBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = SearchFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = SearchFragmentBinding.bind(view)
+
         initView()
         initViewModel()
     }
@@ -72,6 +70,8 @@ class SearchFragment : Fragment() {
     }
 
     class KaKaoSearchManager{
+
+
 
     }
 

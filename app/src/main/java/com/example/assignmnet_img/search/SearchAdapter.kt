@@ -21,7 +21,6 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
     }
 ) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder {
         return ViewHolder(
             SearchItemBinding.inflate(

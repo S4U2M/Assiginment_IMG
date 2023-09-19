@@ -16,7 +16,7 @@ private const val ARG_PARAM2 = "param2"
 class BookMarkFragment : Fragment() {
 
     private var _binding:BookMarkFragmentBinding? = null
-    private val binding = _binding
+    private val binding get() =  _binding
 
     private var param1: String? = null
     private var param2: String? = null

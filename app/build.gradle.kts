@@ -3,9 +3,12 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
 }
 
+
 val key = gradleLocalProperties(rootDir).getProperty("api.key")
+
 
 android {
     namespace = "com.example.assignmnet_img"
@@ -21,6 +24,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "API_KAKAO_SEARCH_KEY", key)
+        manifestPlaceholders["kakao_native_key"] = key
     }
 
     buildTypes {
@@ -49,6 +53,7 @@ android {
 }
 
 dependencies {
+
     //retrofit2
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -63,7 +68,6 @@ dependencies {
 
     //glide
     implementation("com.github.bumptech.glide:glide:4.16.0")
-
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")

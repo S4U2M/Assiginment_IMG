@@ -6,7 +6,7 @@
 
     <meta-data
         android:name="com.kakao.sdk.AppKey"
-        android:value= "${API_KAKAO_SEARCH_KEY}"
+        android:value= "${kakao_native_key}"
         />
 
     <application
