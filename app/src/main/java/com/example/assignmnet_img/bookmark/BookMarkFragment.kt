@@ -1,6 +1,7 @@
 package com.example.assignmnet_img.bookmark
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +62,9 @@ class BookMarkFragment : Fragment() {
         sharedViewModel.liveSearchModel.observe(viewLifecycleOwner) {
             val updateBookmarkModel =
                 sharedViewModel.liveSearchModel.value?.toBookmarkModel() ?: return@observe
+
+            Log.d("북마크.도착", updateBookmarkModel.toString())
+            Log.d("북마크.리스트", bookmarkList.value.toString())
 
             addModel(updateBookmarkModel)
         }
