@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
+import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,6 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
+import java.util.concurrent.atomic.AtomicLong
 
 
 class SearchFragment : Fragment() {
@@ -60,17 +62,23 @@ class SearchFragment : Fragment() {
         searchList.adapter = searchAdapter
 
         searchBtnClick.setOnClickListener{
+
             searchIMG(searchEtText.text.toString())
+            Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
     }
 
     private fun initViewModel() = with(viewModel) {
         searchList.observe(viewLifecycleOwner) {
             searchAdapter.submitList(it)
+            Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
         }
 
     }
 
+    private val setID = AtomicLong(1L)
+
+    //retrofit interface
     interface ImgSearchApi {
         @GET("v2/search/image")
         fun searchImage(
@@ -78,9 +86,10 @@ class SearchFragment : Fragment() {
         ): Call<ResultImgModel>
     }
 
-    //header 는 고정 해야한다.
 
+    // 검색을 위한 메소드
     private fun searchIMG(keyword: String) {
+        //OkhttpClient
         val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
             val request: Request = chain.request()
                 .newBuilder()
@@ -89,6 +98,7 @@ class SearchFragment : Fragment() {
             chain.proceed(request)
         }.build()
 
+        //retrofit
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -100,8 +110,20 @@ class SearchFragment : Fragment() {
 
        call.enqueue(object : Callback<ResultImgModel>{
            override fun onResponse(call: Call<ResultImgModel>, response: Response<ResultImgModel>) {
-               Log.d("Test", "Raw: ${response.raw()}")
-               Log.d("Test", "Body: ${response.body()}")
+               val result = response.body()
+               result?.documents?.let { documents ->
+
+                   val searchList = documents.map { document ->
+                       SearchModel(
+                           id=setID.getAndIncrement(),
+                           imageUrl = document.image_url,
+                           displaySiteName = document.display_sitename,
+                           datetime = document.datetime
+                       )
+                   }
+
+                viewModel.getList(searchList)
+               }
            }
 
            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
