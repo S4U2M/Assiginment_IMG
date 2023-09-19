@@ -24,7 +24,7 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
     }
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             SearchItemBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -34,7 +34,7 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
         )
     }
 
-    override fun onBindViewHolder(holder: SearchAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
 
         holder.bind(item)

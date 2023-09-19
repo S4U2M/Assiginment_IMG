@@ -46,7 +46,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = SearchFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        searchList.adapter = searchAdapter
+        searchRcList.adapter = searchAdapter
 
         searchBtnClick.setOnClickListener{
 
