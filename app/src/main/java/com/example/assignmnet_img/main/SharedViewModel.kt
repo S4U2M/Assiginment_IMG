@@ -1,11 +1,21 @@
 package com.example.assignmnet_img.main
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.assignmnet_img.bookmark.BookmarkModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
+import com.example.assignmnet_img.search.dataclass.toBookmarkModel
 
-class SharedViewModel:ViewModel() {
+class SharedViewModel : ViewModel() {
 
-    val liveSearchModel : MutableLiveData<SearchModel> = MutableLiveData()
+    val liveSearchModel: MutableLiveData<SearchModel> = MutableLiveData()
+
+    fun updateSearchModel(item: SearchModel) {
+        liveSearchModel.value = item
+    }
+
 
 }
+
+// 레포지토리 만들어보자
