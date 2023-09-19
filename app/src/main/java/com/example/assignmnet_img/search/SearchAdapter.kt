@@ -11,7 +11,6 @@ import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
 class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
-
     object : DiffUtil.ItemCallback<SearchModel>() {
         override fun areItemsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
             return oldItem.id == newItem.id
@@ -23,14 +22,9 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
 
     }
 ) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            SearchItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+            SearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -40,12 +34,14 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
         holder.bind(item)
     }
 
-    class ViewHolder(private val binding: SearchItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(private val binding: SearchItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: SearchModel) = with(binding) {
             searchItemDate.text = item.datetime
-            searchItemTitle.text=item.displaySiteName
+            searchItemTitle.text = item.displaySiteName
         }
     }
 }
+
+
