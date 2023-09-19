@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
@@ -60,8 +61,9 @@ class SearchFragment : Fragment() {
 
     private fun initView() = with(binding) {
         searchRcList.adapter = searchAdapter
+        searchRcList.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        searchBtnClick.setOnClickListener{
+        searchBtnClick.setOnClickListener {
 
             searchIMG(searchEtText.text.toString())
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
@@ -108,29 +110,32 @@ class SearchFragment : Fragment() {
         val api = retrofit.create(ImgSearchApi::class.java)
         val call = api.searchImage(keyword)
 
-       call.enqueue(object : Callback<ResultImgModel>{
-           override fun onResponse(call: Call<ResultImgModel>, response: Response<ResultImgModel>) {
-               val result = response.body()
-               result?.documents?.let { documents ->
+        call.enqueue(object : Callback<ResultImgModel> {
+            override fun onResponse(
+                call: Call<ResultImgModel>,
+                response: Response<ResultImgModel>
+            ) {
+                val result = response.body()
+                result?.documents?.let { documents ->
 
-                   val resultList = documents.map { document ->
-                       SearchModel(
-                           id=setID.getAndIncrement(),
-                           imageUrl = document.image_url,
-                           displaySiteName = document.display_sitename,
-                           datetime = document.datetime
-                       )
-                   }
+                    val resultList = documents.map { document ->
+                        SearchModel(
+                            id = setID.getAndIncrement(),
+                            imageUrl = document.image_url,
+                            displaySiteName = document.display_sitename,
+                            datetime = document.datetime
+                        )
+                    }
 
-                viewModel.getList(resultList)
-               }
-           }
+                    viewModel.getList(resultList)
+                }
+            }
 
-           override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
-               Log.d("Test","통신실패")
-           }
+            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
+                Log.d("Test", "통신실패")
+            }
 
-       })
+        })
     }
 
 }
