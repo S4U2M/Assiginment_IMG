@@ -1,4 +1,4 @@
-package com.example.assignmnet_img.search
+package com.example.assignmnet_img.bookmark
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,30 +7,30 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.assignmnet_img.R
+import com.example.assignmnet_img.databinding.BookMarkItemBinding
 import com.example.assignmnet_img.databinding.SearchItemBinding
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
-class SearchAdapter(
+class BookMarkAdapter(
 
-    private val onLongClickItem: (SearchModel) -> Unit
+    private val onLongClickItem: (BookmarkModel) -> Unit
 
-) : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
-    object : DiffUtil.ItemCallback<SearchModel>() {
-        override fun areItemsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
+) : ListAdapter<BookmarkModel, BookMarkAdapter.ViewHolder>(
+    object : DiffUtil.ItemCallback<BookmarkModel>() {
+        override fun areItemsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
+        override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
             return oldItem == newItem
         }
+
     }
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            SearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
-            onLongClickItem
+            BookMarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ,onLongClickItem
         )
     }
 
@@ -40,29 +40,25 @@ class SearchAdapter(
         holder.bind(item)
     }
 
-
     class ViewHolder(
-        private val binding: SearchItemBinding,
-        private val onLongClickItem: (SearchModel) -> Unit
+        private val binding: BookMarkItemBinding,
+        private val onLongClickItem: (BookmarkModel) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private val context = binding.root.context
-        fun bind(item: SearchModel) = with(binding) {
+        fun bind(item: BookmarkModel) = with(binding) {
 
-            searchItemContainer.setOnLongClickListener {
+            bookMarkItemContainer.setOnLongClickListener{
                 onLongClickItem(item)
                 true
             }
 
             Glide.with(context)
                 .load(item.imageUrl.toUri())
-                .into(searchItemImg)
-
-            searchItemDate.text = item.datetime
-            searchItemTitle.text = item.displaySiteName
-
+                .into(bookMarkItemImg)
+            bookMarkItemDate.text = item.datetime
+            bookMarkItemTitle.text = item.displaySiteName
         }
     }
+
 }
-
-

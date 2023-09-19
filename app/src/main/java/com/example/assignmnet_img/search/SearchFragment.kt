@@ -1,11 +1,13 @@
 package com.example.assignmnet_img.search
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -23,7 +25,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
@@ -43,11 +44,11 @@ class SearchFragment : Fragment() {
     private val searchAdapter by lazy {
         SearchAdapter(
             onLongClickItem = { item ->
-                updateItem(item)
+
+                alterDialog(item)
                 Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
             }
         )
-
     }
 
     private val viewModel: SearchViewModel by lazy {
@@ -78,17 +79,16 @@ class SearchFragment : Fragment() {
             val event = event.action == KeyEvent.ACTION_DOWN
 
             if (event && keycode == KeyEvent.KEYCODE_ENTER) {
-
                 searchBtnClick.performClick()
-                return@setOnKeyListener  true
+                return@setOnKeyListener true
             }
 
-            Log.d("엔터ㅓ", keycode.toString())
+            Log.d("엔터", keycode.toString())
+
             false
         }
 
         searchBtnClick.setOnClickListener {
-
             searchIMG(searchEtText.text.toString())
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
@@ -105,7 +105,11 @@ class SearchFragment : Fragment() {
     //sharedViewModel을 업데이트해주는 메소드
     private fun updateItem(item: SearchModel) = with(sharedViewModel) {
 
-        liveSearchModel.value = item
+        sharedViewModel.updateSearchModel(item)
+//        liveSearchModel.value = item
+        // viewmodel안에 메소드화 하기
+        // 캡슐화,은닉화
+        // 뷰 모델
 
     }
 
@@ -170,6 +174,21 @@ class SearchFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun alterDialog(item: SearchModel){
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("북마크")
+        builder.setMessage("북마크에 추가하시겠습니까?")
+        builder.setNegativeButton("예") { _, _ ->
+            updateItem(item)
+            Toast.makeText(context, "북마크에 저장되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        builder.setPositiveButton("아니오") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
 }
