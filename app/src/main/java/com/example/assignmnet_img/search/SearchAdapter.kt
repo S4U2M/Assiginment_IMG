@@ -2,6 +2,7 @@ package com.example.assignmnet_img.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,7 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
 
     object : DiffUtil.ItemCallback<SearchModel>() {
         override fun areItemsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
-            return oldItem.imageUrl == newItem.imageUrl
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
@@ -35,13 +36,16 @@ class SearchAdapter : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
 
     override fun onBindViewHolder(holder: SearchAdapter.ViewHolder, position: Int) {
         val item = getItem(position)
+
+        holder.bind(item)
     }
 
     class ViewHolder(private val binding: SearchItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ResultImgModel) = with(binding) {
-
+        fun bind(item: SearchModel) = with(binding) {
+            searchItemDate.text = item.datetime
+            searchItemTitle.text=item.displaySiteName
         }
     }
 }
