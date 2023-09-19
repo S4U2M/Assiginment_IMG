@@ -113,7 +113,7 @@ class SearchFragment : Fragment() {
                val result = response.body()
                result?.documents?.let { documents ->
 
-                   val searchList = documents.map { document ->
+                   val resultList = documents.map { document ->
                        SearchModel(
                            id=setID.getAndIncrement(),
                            imageUrl = document.image_url,
@@ -122,7 +122,7 @@ class SearchFragment : Fragment() {
                        )
                    }
 
-                viewModel.getList(searchList)
+                viewModel.getList(resultList)
                }
            }
 
