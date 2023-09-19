@@ -2,13 +2,16 @@ package com.example.assignmnet_img.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
+import com.example.assignmnet_img.main.SharedViewModel
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
@@ -23,7 +26,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
-
+import androidx.fragment.app.activityViewModels
 
 class SearchFragment : Fragment() {
 
@@ -35,13 +38,22 @@ class SearchFragment : Fragment() {
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
 
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private val searchAdapter by lazy {
-        SearchAdapter()
+        SearchAdapter(
+            onLongClickItem = { item ->
+                updateItem(item)
+                Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
+            }
+        )
+
     }
 
     private val viewModel: SearchViewModel by lazy {
         ViewModelProvider(this)[SearchViewModel::class.java]
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,8 +72,22 @@ class SearchFragment : Fragment() {
 
     private fun initView() = with(binding) {
         searchRcList.adapter = searchAdapter
+        searchRcList.layoutManager = GridLayoutManager(requireContext(), 2)
 
-        searchBtnClick.setOnClickListener{
+        searchEtText.setOnKeyListener { _, keycode, event ->
+            val event = event.action == KeyEvent.ACTION_DOWN
+
+            if (event && keycode == KeyEvent.KEYCODE_ENTER) {
+
+                searchBtnClick.performClick()
+                return@setOnKeyListener  true
+            }
+
+            Log.d("엔터ㅓ", keycode.toString())
+            false
+        }
+
+        searchBtnClick.setOnClickListener {
 
             searchIMG(searchEtText.text.toString())
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
@@ -75,6 +101,16 @@ class SearchFragment : Fragment() {
         }
 
     }
+
+    //sharedViewModel을 업데이트해주는 메소드
+    private fun updateItem(item: SearchModel) = with(sharedViewModel) {
+
+        liveSearchModel.value = item
+
+    }
+
+
+    //id부여를 위한 변수
 
     private val setID = AtomicLong(1L)
 
@@ -108,29 +144,32 @@ class SearchFragment : Fragment() {
         val api = retrofit.create(ImgSearchApi::class.java)
         val call = api.searchImage(keyword)
 
-       call.enqueue(object : Callback<ResultImgModel>{
-           override fun onResponse(call: Call<ResultImgModel>, response: Response<ResultImgModel>) {
-               val result = response.body()
-               result?.documents?.let { documents ->
+        call.enqueue(object : Callback<ResultImgModel> {
+            override fun onResponse(
+                call: Call<ResultImgModel>,
+                response: Response<ResultImgModel>
+            ) {
+                val result = response.body()
+                result?.documents?.let { documents ->
 
-                   val searchList = documents.map { document ->
-                       SearchModel(
-                           id=setID.getAndIncrement(),
-                           imageUrl = document.image_url,
-                           displaySiteName = document.display_sitename,
-                           datetime = document.datetime
-                       )
-                   }
+                    val resultList = documents.map { document ->
+                        SearchModel(
+                            id = setID.getAndIncrement(),
+                            imageUrl = document.image_url,
+                            displaySiteName = document.display_sitename,
+                            datetime = document.datetime
+                        )
+                    }
 
-                viewModel.getList(searchList)
-               }
-           }
+                    viewModel.getList(resultList)
+                }
+            }
 
-           override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
-               Log.d("Test","통신실패")
-           }
+            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
+                Log.d("Test", "통신실패")
+            }
 
-       })
+        })
     }
 
 }

@@ -11,20 +11,6 @@ class SearchViewModel(): ViewModel() {
     private val _searchList : MutableLiveData<List<SearchModel>> = MutableLiveData()
     val searchList : LiveData<List<SearchModel>> get() = _searchList
 
-    init {
-        _searchList.value = mutableListOf<SearchModel>().apply {
-            for(i in 0 .. 3){
-                add(
-                    SearchModel(
-                        id = i+10000.toLong(),
-                        imageUrl = "qr",
-                        displaySiteName = "11",
-                        datetime = "$i"
-                    )
-                )
-            }
-        }
-    }
 
     fun getList(list:List<SearchModel>){
         var currentList = searchList.value.orEmpty().toMutableList()
