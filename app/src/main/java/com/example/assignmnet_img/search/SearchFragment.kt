@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
-import com.example.assignmnet_img.search.dataclass.SearchResultIMG
+import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -59,6 +59,9 @@ class SearchFragment : Fragment() {
     private fun initView() = with(binding) {
         searchList.adapter = searchAdapter
 
+        searchBtnClick.setOnClickListener{
+            searchIMG(searchEtText.text.toString())
+        }
     }
 
     private fun initViewModel() = with(viewModel) {
@@ -71,16 +74,17 @@ class SearchFragment : Fragment() {
     interface ImgSearchApi {
         @GET("v2/search/image")
         fun searchImage(
-            @Header("Authorization") apiKey: String = API_KEY,
             @Query("query") query: String
-        ): Call<SearchResultIMG>
+        ): Call<ResultImgModel>
     }
+
+    //header 는 고정 해야한다.
 
     private fun searchIMG(keyword: String) {
         val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
             val request: Request = chain.request()
                 .newBuilder()
-                .addHeader("Authorization", API_KEY)
+                .addHeader("Authorization", "KakaoAK ${API_KEY}")
                 .build()
             chain.proceed(request)
         }.build()
@@ -92,15 +96,15 @@ class SearchFragment : Fragment() {
             .build()
 
         val api = retrofit.create(ImgSearchApi::class.java)
-        val call = api.searchImage(API_KEY,keyword)
+        val call = api.searchImage(keyword)
 
-       call.enqueue(object : Callback<SearchResultIMG>{
-           override fun onResponse(call: Call<SearchResultIMG>, response: Response<SearchResultIMG>) {
+       call.enqueue(object : Callback<ResultImgModel>{
+           override fun onResponse(call: Call<ResultImgModel>, response: Response<ResultImgModel>) {
                Log.d("Test", "Raw: ${response.raw()}")
                Log.d("Test", "Body: ${response.body()}")
            }
 
-           override fun onFailure(call: Call<SearchResultIMG>, t: Throwable) {
+           override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
                Log.d("Test","통신실패")
            }
 

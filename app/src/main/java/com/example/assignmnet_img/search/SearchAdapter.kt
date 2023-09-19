@@ -12,7 +12,7 @@ class SearchAdapter : ListAdapter<ResultImgModel, SearchAdapter.ViewHolder>(
 
     object : DiffUtil.ItemCallback<ResultImgModel>() {
         override fun areItemsTheSame(oldItem: ResultImgModel, newItem: ResultImgModel): Boolean {
-            return oldItem.imageUrl == newItem.imageUrl
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: ResultImgModel, newItem: ResultImgModel): Boolean {
