@@ -83,7 +83,7 @@ class SearchFragment : Fragment() {
                 return@setOnKeyListener true
             }
 
-            Log.d("엔터", keycode.toString())
+            Log.d("키보드", keycode.toString())
 
             false
         }
