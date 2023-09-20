@@ -83,7 +83,11 @@ class BookMarkFragment : Fragment() {
         builder.setTitle("삭제")
         builder.setMessage("북마크에서 삭제하시겠습니까?")
         builder.setNegativeButton("예") { _, _ ->
+            val updateItem = item.copy(isBookmark = false)
+            sharedViewModel.updateBookMarkModel(updateItem)
+
             bookmarkViewModel.removeItem(item)
+
             Toast.makeText(context, "북마크에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
         }
         builder.setPositiveButton("아니오") { dialog, _ ->
