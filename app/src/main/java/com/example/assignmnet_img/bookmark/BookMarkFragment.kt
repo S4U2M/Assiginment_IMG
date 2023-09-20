@@ -11,12 +11,9 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.assignmnet_img.R
 import com.example.assignmnet_img.databinding.BookMarkFragmentBinding
 import com.example.assignmnet_img.main.SharedViewModel
-import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.dataclass.toBookmarkModel
-import java.util.concurrent.atomic.AtomicLong
 
 
 class BookMarkFragment : Fragment() {
@@ -77,7 +74,7 @@ class BookMarkFragment : Fragment() {
             Log.d("북마크.도착", updateBookmarkModel.toString())
             Log.d("북마크.리스트", bookmarkList.value.toString())
 
-            addModel(updateBookmarkModel)
+            compareItem(updateBookmarkModel)
         }
     }
 

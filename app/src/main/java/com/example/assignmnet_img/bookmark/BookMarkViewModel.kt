@@ -9,20 +9,9 @@ class BookMarkViewModel : ViewModel() {
     private val _bookmarkList: MutableLiveData<List<BookmarkModel>> = MutableLiveData()
     val bookmarkList: LiveData<List<BookmarkModel>> get() = _bookmarkList
 
-    fun addModel(item: BookmarkModel?) {
-        if (item == null) return
-
+    fun addItem(item: BookmarkModel?) {
         val currentList = bookmarkList.value.orEmpty().toMutableList()
-//            .apply {
-//            add(item)
-//        }
-        val findItem = currentList.find {
-                    it.datetime == item.datetime &&
-                    it.imageUrl == item.imageUrl &&
-                    it.displaySiteName == item.displaySiteName
-        }
-        if (findItem != null) return
-        //할지말지 물어보기
+        if (item == null) return
         currentList.add(item)
         _bookmarkList.value = currentList
 
@@ -42,5 +31,19 @@ class BookMarkViewModel : ViewModel() {
 
         _bookmarkList.value = currentList
 
+    }
+
+    fun compareItem(item: BookmarkModel) {
+        val currentList = bookmarkList.value.orEmpty().toMutableList()
+
+        var compareItem = currentList.find {
+            it.datetime == item?.datetime &&
+                    it.imageUrl == item.imageUrl &&
+                    it.displaySiteName == item.displaySiteName
+        }
+
+        if (compareItem != null) {
+            if (item.isBookmark != compareItem.isBookmark) removeItem(compareItem)
+        } else addItem(item)
     }
 }

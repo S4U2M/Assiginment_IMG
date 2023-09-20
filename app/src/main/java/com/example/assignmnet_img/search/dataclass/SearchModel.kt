@@ -16,6 +16,7 @@ fun SearchModel.toBookmarkModel(): BookmarkModel {
         id = id,
         imageUrl = imageUrl,
         displaySiteName = displaySiteName,
-        datetime = datetime
+        datetime = datetime,
+        isBookmark = isBookmark
     )
 }

@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/search_item_container"
-    android:padding="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <ImageView
         android:id="@+id/search_item_img"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
         android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintBottom_toTopOf="@id/search_item_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,19 +23,31 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:textSize="14dp"
         android:textStyle="bold"
-        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/search_item_date"
+        app:layout_constraintEnd_toStartOf="@id/search_iv_is_bookmark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_item_img" />
+
+    <ImageView
+        android:id="@+id/search_iv_is_bookmark"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/ic_bookmark"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/search_item_date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/search_item_title"
         app:layout_constraintTop_toBottomOf="@id/search_item_img" />
 
     <TextView
         android:id="@+id/search_item_date"
         android:layout_width="0dp"
-        android:textSize="10dp"
         android:layout_height="wrap_content"
+        android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
