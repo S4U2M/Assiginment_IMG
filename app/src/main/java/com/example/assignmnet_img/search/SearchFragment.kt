@@ -109,7 +109,7 @@ class SearchFragment : Fragment() {
             liveBookMarkModel.observe(viewLifecycleOwner){
                 val updateItem = liveBookMarkModel.value?.toSearchModel()
 
-                viewModel.updateItem(updateItem)
+                viewModel.compareUpdateItem(updateItem)
             }
         }
 
@@ -119,10 +119,6 @@ class SearchFragment : Fragment() {
     private fun updateItem(item: SearchModel) = with(sharedViewModel) {
 
         sharedViewModel.updateSearchModel(item)
-//        liveSearchModel.value = item
-        // viewmodel안에 메소드화 하기
-        // 캡슐화,은닉화
-        // 뷰 모델
 
     }
 
