@@ -44,9 +44,12 @@ class SearchFragment : Fragment() {
     private val searchAdapter by lazy {
         SearchAdapter(
             onLongClickItem = { item ->
-
-                addAlterDialog(item)
-                Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
+                if (!item.isBookmark) {
+                    addAlterDialog(item)
+                    Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
+                } else{
+                    removeAlterDialog(item)
+                }
             }
         )
     }
@@ -176,7 +179,7 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun addAlterDialog(item: SearchModel){
+    private fun addAlterDialog(item: SearchModel) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("북마크 추가")
         builder.setMessage("북마크에 추가하시겠습니까?")
@@ -187,6 +190,25 @@ class SearchFragment : Fragment() {
             viewModel.updateItem(updateItem)
 
             Toast.makeText(context, "북마크에 저장되었습니다.", Toast.LENGTH_SHORT).show()
+        }
+        builder.setPositiveButton("아니오") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+    private fun removeAlterDialog(item: SearchModel) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("북마크 삭제")
+        builder.setMessage("북마크에서 삭제하시겠습니까?")
+        builder.setNegativeButton("예") { _, _ ->
+
+            val updateItem = item.copy(isBookmark = false)
+            updateItem(updateItem)
+            viewModel.updateItem(updateItem)
+
+            Toast.makeText(context, "북마크에서 삭제되었습니다.", Toast.LENGTH_SHORT).show()
         }
         builder.setPositiveButton("아니오") { dialog, _ ->
             dialog.dismiss()
