@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/book_mark_item_container"
-    android:padding="5dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/book_mark_item_img"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"
         android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_launcher_background"
         app:layout_constraintBottom_toTopOf="@id/book_mark_item_title"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,18 +23,18 @@
         android:id="@+id/search_iv_bookmarked"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="355dp"
-        tools:layout_editor_absoluteY="401dp"
-        tools:ignore="MissingConstraints" />
+        tools:layout_editor_absoluteY="401dp" />
 
     <TextView
         android:id="@+id/book_mark_item_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:textSize="14dp"
         android:textStyle="bold"
-        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/book_mark_item_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,8 +43,8 @@
     <TextView
         android:id="@+id/book_mark_item_date"
         android:layout_width="0dp"
-        android:textSize="10dp"
         android:layout_height="wrap_content"
+        android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
