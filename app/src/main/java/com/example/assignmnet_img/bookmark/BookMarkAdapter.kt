@@ -29,8 +29,8 @@ class BookMarkAdapter(
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            BookMarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ,onLongClickItem
+            BookMarkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            onLongClickItem
         )
     }
 
@@ -48,7 +48,7 @@ class BookMarkAdapter(
         private val context = binding.root.context
         fun bind(item: BookmarkModel) = with(binding) {
 
-            bookMarkItemContainer.setOnLongClickListener{
+            bookMarkItemContainer.setOnLongClickListener {
                 onLongClickItem(item)
                 true
             }

@@ -55,7 +55,6 @@ class SearchViewModel() : ViewModel() {
 
     fun compareUpdateItem(item: SearchModel?) {
         if (item == null) return
-        val currentList = searchList.value.orEmpty().toMutableList()
         if (findItem(item) == null) return
         else updateItem(item)
 

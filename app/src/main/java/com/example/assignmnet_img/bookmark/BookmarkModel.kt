@@ -3,11 +3,11 @@ package com.example.assignmnet_img.bookmark
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
 data class BookmarkModel(
-    val id : Long = -1,
+    val id: Long = -1,
     val imageUrl: String,
     val displaySiteName: String,
     val datetime: String,
-    val isBookmark : Boolean = false
+    val isBookmark: Boolean = false
 )
 
 fun BookmarkModel.toSearchModel(): SearchModel {
