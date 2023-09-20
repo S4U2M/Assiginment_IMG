@@ -1,6 +1,7 @@
-package com.example.assignmnet_img.bookmark
+package com.example.assignmnet_img.bookmark.sharedhelper
 
 import android.content.Context
+import com.example.assignmnet_img.bookmark.BookmarkModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
