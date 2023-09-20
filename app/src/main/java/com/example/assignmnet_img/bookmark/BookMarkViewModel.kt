@@ -1,15 +1,18 @@
 package com.example.assignmnet_img.bookmark
 
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+
 
 class BookMarkViewModel : ViewModel() {
 
     private val _bookmarkList: MutableLiveData<List<BookmarkModel>> = MutableLiveData()
     val bookmarkList: LiveData<List<BookmarkModel>> get() = _bookmarkList
 
-    fun addItem(item: BookmarkModel?) {
+
+    private fun addItem(item: BookmarkModel?) {
         val currentList = bookmarkList.value.orEmpty().toMutableList()
         if (item == null) return
         currentList.add(item)
@@ -21,6 +24,10 @@ class BookMarkViewModel : ViewModel() {
         val currentList = bookmarkList.value.orEmpty().toMutableList()
         val findItem = currentList.find { it == item }
         return currentList.indexOf(findItem)
+    }
+
+    fun loadData(items:List<BookmarkModel>){
+        _bookmarkList.value = items
     }
 
     fun removeItem(item: BookmarkModel?) {
@@ -46,4 +53,5 @@ class BookMarkViewModel : ViewModel() {
             if (item.isBookmark != compareItem.isBookmark) removeItem(compareItem)
         } else addItem(item)
     }
+
 }

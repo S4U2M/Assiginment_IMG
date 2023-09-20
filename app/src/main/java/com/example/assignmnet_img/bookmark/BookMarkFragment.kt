@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.assignmnet_img.bookmark.sharedhelper.BookMarkSharedPrfHelper
 import com.example.assignmnet_img.databinding.BookMarkFragmentBinding
 import com.example.assignmnet_img.main.SharedViewModel
 import com.example.assignmnet_img.search.dataclass.toBookmarkModel
@@ -62,19 +63,28 @@ class BookMarkFragment : Fragment() {
         bookmarkRcList.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
-    private fun initViewModel() = with(bookmarkViewModel) {
-        bookmarkList.observe(viewLifecycleOwner) {
-            bookMarkAdapter.submitList(it)
+    private fun initViewModel() {
+
+        with(bookmarkViewModel) {
+            val loadBookMark = BookMarkSharedPrfHelper.loadBookmarkData(requireContext())
+            loadData(loadBookMark)
+            bookmarkList.observe(viewLifecycleOwner) {
+                bookMarkAdapter.submitList(it)
+                //북마크 저장
+                BookMarkSharedPrfHelper.saveBookmarkData(requireContext(), bookmarkList.value)
+            }
         }
 
-        sharedViewModel.liveSearchModel.observe(viewLifecycleOwner) {
-            val updateBookmarkModel =
-                sharedViewModel.liveSearchModel.value?.toBookmarkModel() ?: return@observe
+        with(sharedViewModel) {
+            liveSearchModel.observe(viewLifecycleOwner) {
+                val updateBookmarkModel =
+                    liveSearchModel.value?.toBookmarkModel() ?: return@observe
 
-            Log.d("북마크.도착", updateBookmarkModel.toString())
-            Log.d("북마크.리스트", bookmarkList.value.toString())
+                Log.d("북마크.도착", updateBookmarkModel.toString())
+                Log.d("북마크.리스트", bookmarkViewModel.bookmarkList.value.toString())
 
-            compareItem(updateBookmarkModel)
+                bookmarkViewModel.compareItem(updateBookmarkModel)
+            }
         }
     }
 
@@ -97,5 +107,9 @@ class BookMarkFragment : Fragment() {
         dialog.show()
     }
 
+    // sharedprf에 대한 작업에 대해
+    // 뷰모델에서 gson 변환 작업이 나음
+    // 데이터 층에서 작업을 해야함
+    //
 
 }
