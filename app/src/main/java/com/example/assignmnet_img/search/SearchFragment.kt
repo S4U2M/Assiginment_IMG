@@ -106,7 +106,7 @@ class SearchFragment : Fragment() {
             }
         }
         with(sharedViewModel) {
-            liveBookMarkModel.observe(viewLifecycleOwner){
+            liveBookMarkModel.observe(viewLifecycleOwner) {
                 val updateItem = liveBookMarkModel.value?.toSearchModel()
 
                 viewModel.compareUpdateItem(updateItem)

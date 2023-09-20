@@ -1,12 +1,12 @@
 package com.example.assignmnet_img.search.dataclass
 
 
-data class ResultImgModel (
+data class ResultImgModel(
     val meta: Meta,
     val documents: List<Document>
 )
 
-data class Document (
+data class Document(
     val collection: String,
     val thumbnail_url: String,
     val image_url: String,
@@ -17,7 +17,7 @@ data class Document (
     val datetime: String
 )
 
-data class Meta (
+data class Meta(
     val totalCount: Int,
     val pageableCount: Int,
     val is_end: Boolean
