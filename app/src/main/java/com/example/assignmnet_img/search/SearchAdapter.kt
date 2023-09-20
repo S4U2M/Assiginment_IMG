@@ -1,6 +1,7 @@
 package com.example.assignmnet_img.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
@@ -60,6 +61,9 @@ class SearchAdapter(
 
             searchItemDate.text = item.datetime
             searchItemTitle.text = item.displaySiteName
+
+            if (item.isBookmark) searchIvIsBookmark.visibility = View.VISIBLE
+            else searchIvIsBookmark.visibility = View.INVISIBLE
 
         }
     }
