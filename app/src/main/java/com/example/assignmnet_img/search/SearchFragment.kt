@@ -28,6 +28,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
+import com.example.assignmnet_img.bookmark.toSearchModel
 
 class SearchFragment : Fragment() {
 
@@ -47,7 +48,7 @@ class SearchFragment : Fragment() {
                 if (!item.isBookmark) {
                     addAlterDialog(item)
                     Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
-                } else{
+                } else {
                     removeAlterDialog(item)
                 }
             }
@@ -97,10 +98,19 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun initViewModel() = with(viewModel) {
-        searchList.observe(viewLifecycleOwner) {
-            searchAdapter.submitList(it)
-            Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
+    private fun initViewModel() {
+        with(viewModel) {
+            searchList.observe(viewLifecycleOwner) {
+                searchAdapter.submitList(it)
+                Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
+            }
+        }
+        with(sharedViewModel) {
+            liveBookMarkModel.observe(viewLifecycleOwner){
+                val updateItem = liveBookMarkModel.value?.toSearchModel()
+
+                viewModel.updateItem(updateItem)
+            }
         }
 
     }
