@@ -11,15 +11,25 @@ class SearchViewModel() : ViewModel() {
     private val _searchList: MutableLiveData<List<SearchModel>> = MutableLiveData()
     val searchList: LiveData<List<SearchModel>> get() = _searchList
 
+    private fun findItem(item: SearchModel?): SearchModel? {
+        val currentList = searchList.value.orEmpty()
+
+        if (item != null) {
+            return currentList.find {
+                it.datetime == item.datetime &&
+                        it.imageUrl == item.imageUrl &&
+                        it.displaySiteName == item.displaySiteName
+            }
+        }
+        return null
+    }
+
+
     private fun findIndex(item: SearchModel?): Int {
 
         val currentList = searchList.value.orEmpty().toMutableList()
 
-        val findItem = currentList.find {
-            it.datetime == item?.datetime &&
-                    it.imageUrl == item.imageUrl &&
-                    it.displaySiteName == item.displaySiteName
-        }
+        val findItem = findItem(item)
 
         return currentList.indexOf(findItem)
 
@@ -41,6 +51,14 @@ class SearchViewModel() : ViewModel() {
         currentList[index] = item
 
         _searchList.value = currentList
+    }
+
+    fun compareUpdateItem(item: SearchModel?) {
+        if (item == null) return
+        val currentList = searchList.value.orEmpty().toMutableList()
+        if (findItem(item) == null) return
+        else updateItem(item)
+
     }
 
 
