@@ -14,6 +14,7 @@ class SearchViewModel() : ViewModel() {
     private fun findIndex(item: SearchModel?): Int {
 
         val currentList = searchList.value.orEmpty().toMutableList()
+
         val findItem = currentList.find {
             it.datetime == item?.datetime &&
                     it.imageUrl == item.imageUrl &&
