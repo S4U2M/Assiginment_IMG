@@ -45,7 +45,7 @@ class SearchFragment : Fragment() {
         SearchAdapter(
             onLongClickItem = { item ->
 
-                alterDialog(item)
+                addAlterDialog(item)
                 Log.d("북마크", sharedViewModel.liveSearchModel.value.toString())
             }
         )
@@ -176,12 +176,16 @@ class SearchFragment : Fragment() {
         })
     }
 
-    private fun alterDialog(item: SearchModel){
+    private fun addAlterDialog(item: SearchModel){
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("북마크")
+        builder.setTitle("북마크 추가")
         builder.setMessage("북마크에 추가하시겠습니까?")
         builder.setNegativeButton("예") { _, _ ->
-            updateItem(item)
+
+            val updateItem = item.copy(isBookmark = true)
+            updateItem(updateItem)
+            viewModel.updateItem(updateItem)
+
             Toast.makeText(context, "북마크에 저장되었습니다.", Toast.LENGTH_SHORT).show()
         }
         builder.setPositiveButton("아니오") { dialog, _ ->
