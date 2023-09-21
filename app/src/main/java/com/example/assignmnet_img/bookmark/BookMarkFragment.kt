@@ -31,7 +31,10 @@ class BookMarkFragment : Fragment() {
     }
 
     private val bookmarkViewModel by lazy {
-        ViewModelProvider(this)[BookMarkViewModel::class.java]
+        ViewModelProvider(
+            this,
+            BookMarkViewModelFactory(requireContext())
+        )[BookMarkViewModel::class.java]
     }
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -60,12 +63,9 @@ class BookMarkFragment : Fragment() {
     private fun initViewModel() {
 
         with(bookmarkViewModel) {
-            val loadBookMark = SharedPrfHelper.loadBookmarkData(requireContext())
-            loadData(loadBookMark)
             bookmarkList.observe(viewLifecycleOwner) {
                 bookMarkAdapter.submitList(it)
-                //북마크 저장
-                SharedPrfHelper.saveBookmarkData(requireContext(), bookmarkList.value)
+                saveBookmarkData(bookmarkList.value)
             }
         }
 
@@ -100,10 +100,5 @@ class BookMarkFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
-
-    // sharedprf에 대한 작업에 대해
-    // 뷰모델에서 gson 변환 작업이 나음
-    // 데이터 층에서 작업을 해야함
-    //
 
 }
