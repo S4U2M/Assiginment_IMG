@@ -11,18 +11,13 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.assignmnet_img.bookmark.sharedhelper.BookMarkSharedPrfHelper
+import com.example.assignmnet_img.main.sharedhelper.SharedPrfHelper
 import com.example.assignmnet_img.databinding.BookMarkFragmentBinding
 import com.example.assignmnet_img.main.SharedViewModel
 import com.example.assignmnet_img.search.dataclass.toBookmarkModel
 
 
 class BookMarkFragment : Fragment() {
-
-    companion object {
-
-    }
-
 
     private var _binding: BookMarkFragmentBinding? = null
     private val binding get() = _binding!!
@@ -32,7 +27,6 @@ class BookMarkFragment : Fragment() {
             onLongClickItem = { item ->
                 alterDialog(item)
             }
-
         )
     }
 
@@ -66,12 +60,12 @@ class BookMarkFragment : Fragment() {
     private fun initViewModel() {
 
         with(bookmarkViewModel) {
-            val loadBookMark = BookMarkSharedPrfHelper.loadBookmarkData(requireContext())
+            val loadBookMark = SharedPrfHelper.loadBookmarkData(requireContext())
             loadData(loadBookMark)
             bookmarkList.observe(viewLifecycleOwner) {
                 bookMarkAdapter.submitList(it)
                 //북마크 저장
-                BookMarkSharedPrfHelper.saveBookmarkData(requireContext(), bookmarkList.value)
+                SharedPrfHelper.saveBookmarkData(requireContext(), bookmarkList.value)
             }
         }
 

@@ -24,7 +24,6 @@ class BookMarkAdapter(
         override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
             return oldItem == newItem
         }
-
     }
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

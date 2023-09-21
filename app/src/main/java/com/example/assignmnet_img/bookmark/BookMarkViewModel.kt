@@ -11,7 +11,6 @@ class BookMarkViewModel : ViewModel() {
     private val _bookmarkList: MutableLiveData<List<BookmarkModel>> = MutableLiveData()
     val bookmarkList: LiveData<List<BookmarkModel>> get() = _bookmarkList
 
-
     private fun addItem(item: BookmarkModel?) {
         val currentList = bookmarkList.value.orEmpty().toMutableList()
         if (item == null) return
@@ -26,7 +25,7 @@ class BookMarkViewModel : ViewModel() {
         return currentList.indexOf(findItem)
     }
 
-    fun loadData(items:List<BookmarkModel>){
+    fun loadData(items: List<BookmarkModel>) {
         _bookmarkList.value = items
     }
 

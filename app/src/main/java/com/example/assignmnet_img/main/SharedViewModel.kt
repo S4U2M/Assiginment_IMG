@@ -10,13 +10,13 @@ import com.example.assignmnet_img.search.dataclass.toBookmarkModel
 class SharedViewModel : ViewModel() {
 
     val liveSearchModel: MutableLiveData<SearchModel> = MutableLiveData()
-    val liveBookMarkModel : MutableLiveData<BookmarkModel> = MutableLiveData()
+    val liveBookMarkModel: MutableLiveData<BookmarkModel> = MutableLiveData()
 
     fun updateSearchModel(item: SearchModel) {
         liveSearchModel.value = item
     }
 
-    fun updateBookMarkModel(item : BookmarkModel){
+    fun updateBookMarkModel(item: BookmarkModel) {
         liveBookMarkModel.value = item
     }
 
