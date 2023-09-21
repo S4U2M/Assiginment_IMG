@@ -57,8 +57,10 @@ class SearchFragment : Fragment() {
     }
 
     private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(this,
-            SearchViewModelFactory(requireContext()))[SearchViewModel::class.java]
+        ViewModelProvider(
+            this,
+            SearchViewModelFactory(requireContext())
+        )[SearchViewModel::class.java]
     }
 
 
@@ -109,7 +111,7 @@ class SearchFragment : Fragment() {
                 searchAdapter.submitList(it)
                 Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
             }
-            searchText.observe(viewLifecycleOwner){
+            searchText.observe(viewLifecycleOwner) {
                 saveSearchText(searchText.value.toString())
             }
         }
@@ -119,7 +121,9 @@ class SearchFragment : Fragment() {
 
                 viewModel.compareUpdateItem(updateItem)
             }
+
         }
+
 
     }
 
