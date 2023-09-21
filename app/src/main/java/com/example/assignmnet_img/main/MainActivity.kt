@@ -5,8 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.compose.ui.text.font.Typeface
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.assignmnet_img.R
+import com.example.assignmnet_img.bookmark.viewmodel.BookMarkViewModel
 import com.example.assignmnet_img.databinding.MainActivityBinding
+import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kakao.sdk.common.util.Utility
 
@@ -25,6 +29,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+
     }
 
     private fun initView() = with(binding) {

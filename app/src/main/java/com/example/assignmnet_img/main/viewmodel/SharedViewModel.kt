@@ -1,4 +1,4 @@
-package com.example.assignmnet_img.main
+package com.example.assignmnet_img.main.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +20,4 @@ class SharedViewModel : ViewModel() {
         liveBookMarkModel.value = item
     }
 
-
 }
-
-// 레포지토리 만들어보자

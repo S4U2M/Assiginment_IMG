@@ -6,10 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.assignmnet_img.bookmark.BookMarkViewModel
 import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
 class SearchViewModel(
