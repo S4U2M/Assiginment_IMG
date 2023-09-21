@@ -1,6 +1,7 @@
 package com.example.assignmnet_img.search
 
 import android.app.AlertDialog
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -29,6 +30,7 @@ import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
 import com.example.assignmnet_img.bookmark.toSearchModel
+import com.example.assignmnet_img.main.sharedhelper.SharedPrfHelper
 
 class SearchFragment : Fragment() {
 
@@ -78,6 +80,7 @@ class SearchFragment : Fragment() {
     private fun initView() = with(binding) {
         searchRcList.adapter = searchAdapter
         searchRcList.layoutManager = GridLayoutManager(requireContext(), 2)
+        SharedPrfHelper.loadSearchText(requireContext(), searchEtText)
 
         searchEtText.setOnKeyListener { _, keycode, event ->
             val event = event.action == KeyEvent.ACTION_DOWN
@@ -93,7 +96,9 @@ class SearchFragment : Fragment() {
         }
 
         searchBtnClick.setOnClickListener {
-            searchIMG(searchEtText.text.toString())
+            val text = searchEtText.text.toString()
+            searchIMG(text)
+            SharedPrfHelper.saveSearchText(requireContext(), text)
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
     }

@@ -1,16 +1,21 @@
-package com.example.assignmnet_img.bookmark.sharedhelper
+package com.example.assignmnet_img.main.sharedhelper
 
 import android.content.Context
+import android.widget.EditText
 import com.example.assignmnet_img.bookmark.BookmarkModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-object BookMarkSharedPrfHelper {
-
+object SharedPrfHelper {
+    //북 마크
     private const val KEY_BOOKMARK_LIST = "key_bookmark_list"
     private const val NAME_BOOKMARK_PRF = "name_bookmark_prf"
 
-    fun saveBookmarkData(context: Context,list: List<BookmarkModel>?) {
+    //검색
+    private const val NAME_SEARCH_TEXT = "name_search_text"
+    private const val KEY_SEARCH_TEXT = "key_name_text"
+
+    fun saveBookmarkData(context: Context, list: List<BookmarkModel>?) {
         if (list == null) return
         val sharedPrf =
             context.getSharedPreferences(NAME_BOOKMARK_PRF, Context.MODE_PRIVATE)
@@ -27,5 +32,19 @@ object BookMarkSharedPrfHelper {
 
         return Gson().fromJson(json, object : TypeToken<List<BookmarkModel>>() {}.type)
             ?: emptyList()
+    }
+
+    fun saveSearchText(context: Context, text: String) {
+        val sharedPrf = context.getSharedPreferences(NAME_SEARCH_TEXT, Context.MODE_PRIVATE)
+        val edit = sharedPrf.edit().apply {
+            putString(KEY_SEARCH_TEXT, text)
+            apply()
+        }
+    }
+
+    fun loadSearchText(context: Context, view: EditText) {
+        val sharedPrf = context.getSharedPreferences(NAME_SEARCH_TEXT, Context.MODE_PRIVATE)
+        val text = sharedPrf.getString(KEY_SEARCH_TEXT, "")
+        view.setText(text)
     }
 }
