@@ -6,14 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.assignmnet_img.provider.ContextProvider
-import com.example.assignmnet_img.provider.ContextProviderImpl
+import com.example.assignmnet_img.bookmark.provider.SharedProvider
+import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 
 class BookMarkViewModel(
-    private val contextProvider: ContextProvider
+    private val contextProvider: SharedProvider
 ) : ViewModel() {
 
     private val _bookmarkList: MutableLiveData<List<BookmarkModel>> = MutableLiveData()
@@ -92,15 +92,10 @@ class BookMarkViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BookMarkViewModel::class.java)) {
             return BookMarkViewModel(
-                ContextProviderImpl(context)
+                SharedProviderImpl(context)
             ) as T
         } else {
             throw IllegalArgumentException("Not found ViewModel class.")
         }
     }
 }
-
-
-
-
-
