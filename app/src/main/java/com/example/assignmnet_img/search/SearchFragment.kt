@@ -1,12 +1,15 @@
 package com.example.assignmnet_img.search
 
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +32,7 @@ import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
 import com.example.assignmnet_img.bookmark.toSearchModel
+import com.example.assignmnet_img.search.viewmdoel.SearchViewModelFactory
 
 class SearchFragment : Fragment() {
 
@@ -56,7 +60,8 @@ class SearchFragment : Fragment() {
     }
 
     private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(this)[SearchViewModel::class.java]
+        ViewModelProvider(this,
+            SearchViewModelFactory(requireContext()))[SearchViewModel::class.java]
     }
 
 
@@ -78,6 +83,7 @@ class SearchFragment : Fragment() {
     private fun initView() = with(binding) {
         searchRcList.adapter = searchAdapter
         searchRcList.layoutManager = GridLayoutManager(requireContext(), 2)
+        viewModel.loadSearchText(searchEtText)
 
         searchEtText.setOnKeyListener { _, keycode, event ->
             val event = event.action == KeyEvent.ACTION_DOWN
@@ -93,7 +99,9 @@ class SearchFragment : Fragment() {
         }
 
         searchBtnClick.setOnClickListener {
-            searchIMG(searchEtText.text.toString())
+            val text = searchEtText.text.toString()
+            searchIMG(text)
+            viewModel.updateText(text)
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
     }
@@ -103,6 +111,9 @@ class SearchFragment : Fragment() {
             searchList.observe(viewLifecycleOwner) {
                 searchAdapter.submitList(it)
                 Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
+            }
+            searchText.observe(viewLifecycleOwner){
+                saveSearchText(searchText.value.toString())
             }
         }
         with(sharedViewModel) {

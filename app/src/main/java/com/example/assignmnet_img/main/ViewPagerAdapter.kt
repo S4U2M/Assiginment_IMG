@@ -24,14 +24,14 @@ class ViewPagerAdapter(
     }
 
     override fun createFragment(position: Int): Fragment {
-        return when(position){
+        return when (position) {
             0 -> SearchFragment()
             1 -> BookMarkFragment()
             else -> throw IllegalStateException()
         }
     }
 
-    fun getTitle(position: Int):Int{
+    fun getTitle(position: Int): Int {
         return fragments[position].titleRes
     }
 }

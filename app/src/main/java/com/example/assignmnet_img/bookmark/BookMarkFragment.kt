@@ -11,18 +11,12 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.assignmnet_img.bookmark.sharedhelper.BookMarkSharedPrfHelper
 import com.example.assignmnet_img.databinding.BookMarkFragmentBinding
 import com.example.assignmnet_img.main.SharedViewModel
 import com.example.assignmnet_img.search.dataclass.toBookmarkModel
 
 
 class BookMarkFragment : Fragment() {
-
-    companion object {
-
-    }
-
 
     private var _binding: BookMarkFragmentBinding? = null
     private val binding get() = _binding!!
@@ -32,12 +26,14 @@ class BookMarkFragment : Fragment() {
             onLongClickItem = { item ->
                 alterDialog(item)
             }
-
         )
     }
 
     private val bookmarkViewModel by lazy {
-        ViewModelProvider(this)[BookMarkViewModel::class.java]
+        ViewModelProvider(
+            this,
+            BookMarkViewModelFactory(requireContext())
+        )[BookMarkViewModel::class.java]
     }
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -66,12 +62,9 @@ class BookMarkFragment : Fragment() {
     private fun initViewModel() {
 
         with(bookmarkViewModel) {
-            val loadBookMark = BookMarkSharedPrfHelper.loadBookmarkData(requireContext())
-            loadData(loadBookMark)
             bookmarkList.observe(viewLifecycleOwner) {
                 bookMarkAdapter.submitList(it)
-                //북마크 저장
-                BookMarkSharedPrfHelper.saveBookmarkData(requireContext(), bookmarkList.value)
+                saveBookmarkData(bookmarkList.value)
             }
         }
 
@@ -106,10 +99,5 @@ class BookMarkFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
-
-    // sharedprf에 대한 작업에 대해
-    // 뷰모델에서 gson 변환 작업이 나음
-    // 데이터 층에서 작업을 해야함
-    //
 
 }
