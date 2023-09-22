@@ -1,4 +1,4 @@
-package com.example.assignmnet_img.bookmark
+package com.example.assignmnet_img.bookmark.viewmodel
 
 
 import android.content.Context
@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.assignmnet_img.bookmark.BookmarkModel
 import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
 import com.google.gson.Gson

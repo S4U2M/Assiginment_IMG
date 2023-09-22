@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.assignmnet_img.R
 import com.example.assignmnet_img.databinding.SearchItemBinding
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 
 class SearchAdapter(
@@ -56,7 +54,7 @@ class SearchAdapter(
             }
 
             Glide.with(context)
-                .load(item.imageUrl.toUri())
+                .load(item.Url.toUri())
                 .into(searchItemImg)
 
             // glide 캐시타입에 대해 공부해 보기
@@ -70,7 +68,7 @@ class SearchAdapter(
             // 앱의 캐시 데이터에 대해 생각해보자
 
             searchItemDate.text = item.datetime
-            searchItemTitle.text = item.displaySiteName
+            searchItemTitle.text = "${item.label}${item.title}"
 
             if (item.isBookmark) searchIvIsBookmark.visibility = View.VISIBLE
             else searchIvIsBookmark.visibility = View.INVISIBLE

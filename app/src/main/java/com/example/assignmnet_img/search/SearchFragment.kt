@@ -1,22 +1,19 @@
 package com.example.assignmnet_img.search
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
-import com.example.assignmnet_img.main.SharedViewModel
+import com.example.assignmnet_img.main.viewmodel.SharedViewModel
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
@@ -27,11 +24,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
 import com.example.assignmnet_img.bookmark.toSearchModel
+import com.example.assignmnet_img.search.dataclass.ResultVideoModel
+import com.example.assignmnet_img.search.retrofit.SearchApi
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModelFactory
 
 class SearchFragment : Fragment() {
@@ -60,8 +57,10 @@ class SearchFragment : Fragment() {
     }
 
     private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(this,
-            SearchViewModelFactory(requireContext()))[SearchViewModel::class.java]
+        ViewModelProvider(
+            this,
+            SearchViewModelFactory(requireContext())
+        )[SearchViewModel::class.java]
     }
 
 
@@ -100,7 +99,7 @@ class SearchFragment : Fragment() {
 
         searchBtnClick.setOnClickListener {
             val text = searchEtText.text.toString()
-            searchIMG(text)
+            viewModel.doSearch(text)
             viewModel.updateText(text)
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
@@ -112,7 +111,7 @@ class SearchFragment : Fragment() {
                 searchAdapter.submitList(it)
                 Log.d("테스트", "initViewModel: ${searchList.value.toString()}")
             }
-            searchText.observe(viewLifecycleOwner){
+            searchText.observe(viewLifecycleOwner) {
                 saveSearchText(searchText.value.toString())
             }
         }
@@ -122,7 +121,9 @@ class SearchFragment : Fragment() {
 
                 viewModel.compareUpdateItem(updateItem)
             }
+
         }
+
 
     }
 
@@ -133,68 +134,10 @@ class SearchFragment : Fragment() {
 
     }
 
-
     //id부여를 위한 변수
 
-    private val setID = AtomicLong(1L)
-
-    //retrofit interface
-    interface ImgSearchApi {
-        @GET("v2/search/image")
-        fun searchImage(
-            @Query("query") query: String
-        ): Call<ResultImgModel>
-    }
 
 
-    // 검색을 위한 메소드
-    private fun searchIMG(keyword: String) {
-        //OkhttpClient
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val request: Request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "KakaoAK ${API_KEY}")
-                .build()
-            chain.proceed(request)
-        }.build()
-
-        //retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
-
-        val api = retrofit.create(ImgSearchApi::class.java)
-        val call = api.searchImage(keyword)
-
-        call.enqueue(object : Callback<ResultImgModel> {
-            override fun onResponse(
-                call: Call<ResultImgModel>,
-                response: Response<ResultImgModel>
-            ) {
-                val result = response.body()
-                result?.documents?.let { documents ->
-
-                    val resultList = documents.map { document ->
-                        SearchModel(
-                            id = setID.getAndIncrement(),
-                            imageUrl = document.image_url,
-                            displaySiteName = document.display_sitename,
-                            datetime = document.datetime
-                        )
-                    }
-
-                    viewModel.getList(resultList)
-                }
-            }
-
-            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
-                Log.d("Test", "통신실패")
-            }
-
-        })
-    }
 
     private fun addAlterDialog(item: SearchModel) {
         val builder = AlertDialog.Builder(context)
@@ -233,5 +176,6 @@ class SearchFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
+
 
 }
