@@ -7,13 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
 import com.example.assignmnet_img.search.SearchFragment
 import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.ResultVideoModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
-import com.example.assignmnet_img.search.retrofit.SearchApi
+import com.example.assignmnet_img.search.retrofit.RetrofitClient
+import com.example.assignmnet_img.search.retrofit.RetrofitInterface
+import com.example.assignmnet_img.unit.Unit.API_KEY
+import com.example.assignmnet_img.unit.Unit.BASE_URL
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import retrofit2.Call
@@ -21,13 +26,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.atomic.AtomicLong
 
 class SearchViewModel(
-    private val contextProvider: SharedProvider
+    private val contextProvider: SharedProvider,
+    private val repository: Repository
 ) : ViewModel() {
 
-    private val _searchList: MutableLiveData<List<SearchModel>> = MutableLiveData()
+    private val _searchList: MutableLiveData<List<SearchModel>> = repository.getList()
     val searchList: LiveData<List<SearchModel>> get() = _searchList
 
     val searchText: MutableLiveData<String> = MutableLiveData()
@@ -61,11 +66,12 @@ class SearchViewModel(
 
     }
 
-    fun getList(list: List<SearchModel>) {
-        val currentList = searchList.value.orEmpty().toMutableList()
+    suspend fun doSearch(keyword:String){
+        viewModelScope.launch {
+            repository.searchImage(keyword,"recency")
+            repository.searchVideo(keyword,"recency")
+        }
 
-        currentList.addAll(list)
-        _searchList.value = currentList
     }
 
     fun updateItem(item: SearchModel?) {
@@ -104,109 +110,6 @@ class SearchViewModel(
         view.setText(text)
     }
 
-    fun doSearch(keyword: String) {
-        clearList()
-        searchVideo(keyword)
-        searchIMG(keyword)
-
-    }
-
-    // 검색을 위한 메소드
-    private fun searchIMG(keyword: String) {
-        //OkhttpClient
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val request: Request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "KakaoAK ${SearchFragment.API_KEY}")
-                .build()
-            chain.proceed(request)
-        }.build()
-
-        //retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(SearchFragment.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
-
-        val api = retrofit.create(SearchApi::class.java)
-        val call = api.searchImage(keyword, "recency", 40)
-
-        call.enqueue(object : Callback<ResultImgModel> {
-            override fun onResponse(
-                call: Call<ResultImgModel>,
-                response: Response<ResultImgModel>
-            ) {
-                val result = response.body()
-                result?.documents?.let { documents ->
-
-                    val resultList = documents.map { document ->
-                        SearchModel(
-                            Url = document.image_url,
-                            label = "[IMG]",
-                            title = document.display_sitename,
-                            datetime = document.datetime
-                        )
-                    }
-                    getList(resultList)
-                }
-            }
-
-            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
-                Log.d("Test", "통신실패")
-            }
-
-        })
-    }
-
-    //비디오 검색
-    private fun searchVideo(keyword: String) {
-        //OkhttpClient
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val request: Request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "KakaoAK ${SearchFragment.API_KEY}")
-                .build()
-            chain.proceed(request)
-        }.build()
-
-        //retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(SearchFragment.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
-
-        val api = retrofit.create(SearchApi::class.java)
-        val call = api.searchVideo(keyword, "recency", 40)
-
-        call.enqueue(object : Callback<ResultVideoModel> {
-            override fun onResponse(
-                call: Call<ResultVideoModel>,
-                response: Response<ResultVideoModel>
-            ) {
-                val result = response.body()
-                result?.documents?.let { documents ->
-                    val resultList = documents.map { document ->
-                        SearchModel(
-                            Url = document.thumbnail,
-                            label = "[Video]",
-                            title = document.title,
-                            datetime = document.datetime,
-                        )
-                    }
-                    getList(resultList)
-                }
-//                Log.d("비디오", response.body().toString())
-            }
-
-            override fun onFailure(call: Call<ResultVideoModel>, t: Throwable) {
-                Log.d("Test", "통신실패")
-            }
-
-        })
-    }
-
 }
 
 class SearchViewModelFactory(
@@ -215,7 +118,8 @@ class SearchViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
             return SearchViewModel(
-                SharedProviderImpl(context)
+                SharedProviderImpl(context),
+                RepositoryImpl(RetrofitClient)
             ) as T
         } else {
             throw IllegalArgumentException("Not found ViewModel class.")

@@ -6,20 +6,20 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface SearchApi {
+interface RetrofitInterface {
     @GET("v2/search/image")
     fun searchImage(
         @Query("query") query: String,
         @Query("sort") sort:String,
         @Query("size") size: Int
-    ): Call<ResultImgModel>
+    ): ResultImgModel
 
     @GET("v2/search/vclip")
     fun searchVideo(
         @Query("query") query: String?,
         @Query("sort") sort:String,
         @Query("size") size: Int
-    ) : Call<ResultVideoModel>
+    ) : ResultVideoModel
 
 }
 
