@@ -18,7 +18,7 @@ class SearchAdapter(
 ) : ListAdapter<SearchModel, SearchAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<SearchModel>() {
         override fun areItemsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.datetime == newItem.datetime
         }
 
         override fun areContentsTheSame(oldItem: SearchModel, newItem: SearchModel): Boolean {

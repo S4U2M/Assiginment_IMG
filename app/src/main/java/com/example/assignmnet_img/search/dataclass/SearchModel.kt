@@ -4,7 +4,6 @@ import com.example.assignmnet_img.bookmark.BookmarkModel
 
 data class SearchModel
     (
-    val id: Long = -1,
     val Url: String,
     val label:String,
     val title: String,
@@ -14,7 +13,6 @@ data class SearchModel
 
 fun SearchModel.toBookmarkModel(): BookmarkModel {
     return BookmarkModel(
-        id = id,
         imageUrl = Url,
         label = label,
         displaySiteName = title,

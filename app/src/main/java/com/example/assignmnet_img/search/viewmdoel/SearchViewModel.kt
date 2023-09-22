@@ -37,7 +37,6 @@ class SearchViewModel(
 
         if (item != null) {
             return currentList.find {
-                it.id == item.id && //고유 아이디 비교
                         it.datetime == item.datetime && //혹시 모를 고유 아이디 부여가 꼬일 시 방어 기제로 상세한 비교
                         it.Url == item.Url &&
                         it.title == item.title
@@ -63,9 +62,8 @@ fun clearList(){
     }
 
     fun getList(list: List<SearchModel>) {
-        var currentList = searchList.value.orEmpty().toMutableList()
-//        currentList.clear()
-        currentList = list.toMutableList()
+        val currentList = searchList.value.orEmpty().toMutableList()
+
         currentList.addAll(list)
         _searchList.value = currentList
     }
@@ -112,7 +110,6 @@ fun clearList(){
         searchIMG(keyword)
     }
 
-    private val setID = AtomicLong(1L)
 
     // 검색을 위한 메소드
     private fun searchIMG(keyword: String) {
@@ -145,7 +142,6 @@ fun clearList(){
 
                     val resultList = documents.map { document ->
                         SearchModel(
-                            id = setID.getAndIncrement(),
                             Url = document.image_url,
                             label = "[IMG]",
                             title = document.display_sitename,
@@ -161,7 +157,6 @@ fun clearList(){
 
         })
     }
-
 
     //비디오 검색
     private fun searchVideo(keyword: String) {
@@ -182,7 +177,7 @@ fun clearList(){
             .build()
 
         val api = retrofit.create(SearchApi::class.java)
-        val call = api.searchVideo(keyword, "recency",40)
+        val call = api.searchVideo(keyword, "recency",1)
 
         call.enqueue(object : Callback<ResultVideoModel> {
             override fun onResponse(
@@ -193,7 +188,6 @@ fun clearList(){
                 result?.documents?.let { documents ->
                     val resultList = documents.map { document ->
                         SearchModel(
-                            id = setID.getAndIncrement(),
                             Url = document.thumbnail,
                             label = "[Video]",
                             title = document.title,

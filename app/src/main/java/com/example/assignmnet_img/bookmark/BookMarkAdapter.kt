@@ -18,7 +18,7 @@ class BookMarkAdapter(
 ) : ListAdapter<BookmarkModel, BookMarkAdapter.ViewHolder>(
     object : DiffUtil.ItemCallback<BookmarkModel>() {
         override fun areItemsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.datetime == newItem.datetime
         }
 
         override fun areContentsTheSame(oldItem: BookmarkModel, newItem: BookmarkModel): Boolean {
