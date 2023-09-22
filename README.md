@@ -15,6 +15,9 @@
 
 ### 주요 기술
 
+#### local.properties
+local properties에 api키를 저장하고 ignore해줌으로써 api키를 숨겼습니다.
+
 #### Retrofit & okhttp3
 
 레트로핏의 서버간 통신을 좀 더 쉽게 도와주기 위해 okhttp3를 사용하였으며 header를 okhttp3로 만든 client에서 들고 있습니다.
