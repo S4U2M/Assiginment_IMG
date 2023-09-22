@@ -8,14 +8,14 @@ import retrofit2.http.Query
 
 interface RetrofitInterface {
     @GET("v2/search/image")
-    fun searchImage(
+    suspend fun searchImage(
         @Query("query") query: String,
         @Query("sort") sort:String,
         @Query("size") size: Int
     ): ResultImgModel
 
     @GET("v2/search/vclip")
-    fun searchVideo(
+    suspend fun searchVideo(
         @Query("query") query: String?,
         @Query("sort") sort:String,
         @Query("size") size: Int

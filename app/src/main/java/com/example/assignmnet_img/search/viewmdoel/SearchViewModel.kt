@@ -10,29 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
-import com.example.assignmnet_img.search.SearchFragment
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
-import com.example.assignmnet_img.search.dataclass.ResultVideoModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.retrofit.RetrofitClient
-import com.example.assignmnet_img.search.retrofit.RetrofitInterface
-import com.example.assignmnet_img.unit.Unit.API_KEY
-import com.example.assignmnet_img.unit.Unit.BASE_URL
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchViewModel(
     private val contextProvider: SharedProvider,
     private val repository: Repository
 ) : ViewModel() {
 
-    private val _searchList: MutableLiveData<List<SearchModel>> = repository.getList()
+    private val _searchList: MutableLiveData<List<SearchModel>> = MutableLiveData()
     val searchList: LiveData<List<SearchModel>> get() = _searchList
 
     val searchText: MutableLiveData<String> = MutableLiveData()
@@ -67,11 +54,16 @@ class SearchViewModel(
     }
 
     suspend fun doSearch(keyword:String){
+        clearList()
         viewModelScope.launch {
-            repository.searchImage(keyword,"recency")
-            repository.searchVideo(keyword,"recency")
+            val resultImagesList = repository.getSearchedImages(keyword)
+            val resultVideosList = repository.getSearchVideos(keyword)
+            val currentList = searchList.value.orEmpty().toMutableList().apply {
+                addAll(resultImagesList)
+                addAll(resultVideosList)
+            }
+            _searchList.value = currentList
         }
-
     }
 
     fun updateItem(item: SearchModel?) {
