@@ -24,11 +24,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
 import com.example.assignmnet_img.bookmark.toSearchModel
+import com.example.assignmnet_img.search.dataclass.ResultVideoModel
+import com.example.assignmnet_img.search.retrofit.SearchApi
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModelFactory
 
 class SearchFragment : Fragment() {
@@ -99,7 +99,8 @@ class SearchFragment : Fragment() {
 
         searchBtnClick.setOnClickListener {
             val text = searchEtText.text.toString()
-            searchIMG(text)
+//            searchIMG(text)
+            searchVideo(text)
             viewModel.updateText(text)
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
@@ -134,19 +135,9 @@ class SearchFragment : Fragment() {
 
     }
 
-
     //id부여를 위한 변수
 
     private val setID = AtomicLong(1L)
-
-    //retrofit interface
-    interface ImgSearchApi {
-        @GET("v2/search/image")
-        fun searchImage(
-            @Query("query") query: String
-        ): Call<ResultImgModel>
-    }
-
 
     // 검색을 위한 메소드
     private fun searchIMG(keyword: String) {
@@ -166,8 +157,8 @@ class SearchFragment : Fragment() {
             .client(httpClient)
             .build()
 
-        val api = retrofit.create(ImgSearchApi::class.java)
-        val call = api.searchImage(keyword)
+        val api = retrofit.create(SearchApi::class.java)
+        val call = api.searchImage(keyword,"recency",40)
 
         call.enqueue(object : Callback<ResultImgModel> {
             override fun onResponse(
@@ -177,7 +168,6 @@ class SearchFragment : Fragment() {
                 val result = response.body()
                 result?.documents?.let { documents ->
 
-
                     val resultList = documents.map { document ->
                         SearchModel(
                             id = setID.getAndIncrement(),
@@ -186,12 +176,55 @@ class SearchFragment : Fragment() {
                             datetime = document.datetime
                         )
                     }
-
                     viewModel.getList(resultList)
                 }
             }
-
             override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
+                Log.d("Test", "통신실패")
+            }
+
+        })
+    }
+    private fun searchVideo(keyword: String) {
+        //OkhttpClient
+        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
+            val request: Request = chain.request()
+                .newBuilder()
+                .addHeader("Authorization", "KakaoAK ${API_KEY}")
+                .build()
+            chain.proceed(request)
+        }.build()
+
+        //retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient)
+            .build()
+
+        val api = retrofit.create(SearchApi::class.java)
+        val call = api.searchVideo(keyword, "recency",40)
+
+        call.enqueue(object : Callback<ResultVideoModel> {
+            override fun onResponse(
+                call: Call<ResultVideoModel>,
+                response: Response<ResultVideoModel>
+            ) {
+//                val result = response.body()
+//                result?.documents?.let { documents ->
+//                    val resultList = documents.map { document ->
+//                        SearchModel(
+//                            id = setID.getAndIncrement(),
+//                            Url = document.url,
+//                            displaySiteName = document.title,
+//                            datetime = document.datetime,
+//                        )
+//                    }
+//                    viewModel.getList(resultList)
+//                }
+                Log.d("비디오", response.body().toString())
+            }
+            override fun onFailure(call: Call<ResultVideoModel>, t: Throwable) {
                 Log.d("Test", "통신실패")
             }
 
