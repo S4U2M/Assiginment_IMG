@@ -1,21 +1,13 @@
-package com.example.assignmnet_img.search.viewmdoel
+package com.example.assignmnet_img.search.viewmdoel.repsitory
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
-import com.example.assignmnet_img.search.dataclass.ResultVideoModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.retrofit.RetrofitClient
 
-interface Repository {
-    suspend fun getSearchedImages(text: String): List<SearchModel>
-    suspend fun getSearchVideos(text: String): List<SearchModel>
-}
-
-class RepositoryImpl(
+class SearchRepositoryImpl(
     private val client: RetrofitClient
-) : Repository {
+) : SearchRepository {
+
+    //데이터 영역
 
     override suspend fun getSearchedImages(text: String): List<SearchModel> {
         val responseImages = client.api.searchImage(text, "recency", 20)
