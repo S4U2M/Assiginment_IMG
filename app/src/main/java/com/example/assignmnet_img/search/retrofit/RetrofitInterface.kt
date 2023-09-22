@@ -10,16 +10,16 @@ interface RetrofitInterface {
     @GET("v2/search/image")
     suspend fun searchImage(
         @Query("query") query: String,
-        @Query("sort") sort:String,
+        @Query("sort") sort: String,
         @Query("size") size: Int
     ): ResultImgModel
 
     @GET("v2/search/vclip")
     suspend fun searchVideo(
         @Query("query") query: String?,
-        @Query("sort") sort:String,
+        @Query("sort") sort: String,
         @Query("size") size: Int
-    ) : ResultVideoModel
+    ): ResultVideoModel
 
 }
 

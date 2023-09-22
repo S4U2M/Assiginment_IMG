@@ -4,7 +4,7 @@ package com.example.assignmnet_img.search.dataclass
 data class ResultImgModel(
     val meta: Meta,
     val documents: List<Document>
-){
+) {
     data class Document(
         val collection: String,
         val thumbnail_url: String,

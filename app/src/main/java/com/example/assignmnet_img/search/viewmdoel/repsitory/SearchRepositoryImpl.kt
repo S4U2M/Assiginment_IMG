@@ -12,7 +12,7 @@ class SearchRepositoryImpl(
     override suspend fun getSearchedImages(text: String): List<SearchModel> {
         val responseImages = client.api.searchImage(text, "recency", 20)
         val responseList = responseImages.documents
-        val resultList = responseList.map {document->
+        val resultList = responseList.map { document ->
             SearchModel(
                 Url = document.image_url,
                 label = "[IMG]",
@@ -24,7 +24,7 @@ class SearchRepositoryImpl(
         return resultList
     }
 
-    override suspend fun getSearchVideos(text: String): List<SearchModel>{
+    override suspend fun getSearchVideos(text: String): List<SearchModel> {
         val responseVideos = client.api.searchVideo(text, "recency", 20)
         val responseList = responseVideos.documents
         val resultList = responseList.map { document ->
