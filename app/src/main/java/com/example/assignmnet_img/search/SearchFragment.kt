@@ -14,29 +14,17 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.assignmnet_img.BuildConfig
 import com.example.assignmnet_img.databinding.SearchFragmentBinding
 import com.example.assignmnet_img.main.viewmodel.SharedViewModel
-import com.example.assignmnet_img.search.dataclass.ResultImgModel
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModel
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.atomic.AtomicLong
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewModelScope
 import com.example.assignmnet_img.bookmark.toSearchModel
-import com.example.assignmnet_img.search.dataclass.ResultVideoModel
-import com.example.assignmnet_img.search.retrofit.SearchApi
+import com.example.assignmnet_img.search.retrofit.RetrofitClient
 import com.example.assignmnet_img.search.viewmdoel.SearchViewModelFactory
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
-    companion object {
-        const val API_KEY = BuildConfig.API_KAKAO_SEARCH_KEY
-        const val BASE_URL = "https://dapi.kakao.com/"
-    }
 
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
@@ -99,9 +87,11 @@ class SearchFragment : Fragment() {
 
         searchBtnClick.setOnClickListener {
             val text = searchEtText.text.toString()
-            viewModel.doSearch(text)
-            viewModel.updateText(text)
-            Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
+            viewModel.viewModelScope.launch {
+                viewModel.doSearch(keyword = text)
+                viewModel.updateText(text)
+            }
+
         }
     }
 
