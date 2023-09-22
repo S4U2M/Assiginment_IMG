@@ -1,7 +1,6 @@
 package com.example.assignmnet_img.search.viewmdoel
 
 import android.content.Context
-import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +11,8 @@ import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.retrofit.RetrofitClient
+import com.example.assignmnet_img.search.viewmdoel.repsitory.Repository
+import com.example.assignmnet_img.search.viewmdoel.repsitory.RepositoryImpl
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
