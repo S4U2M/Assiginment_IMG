@@ -185,6 +185,8 @@ class SearchFragment : Fragment() {
 
         })
     }
+
+    //비디오 검색
     private fun searchVideo(keyword: String) {
         //OkhttpClient
         val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
@@ -210,19 +212,19 @@ class SearchFragment : Fragment() {
                 call: Call<ResultVideoModel>,
                 response: Response<ResultVideoModel>
             ) {
-//                val result = response.body()
-//                result?.documents?.let { documents ->
-//                    val resultList = documents.map { document ->
-//                        SearchModel(
-//                            id = setID.getAndIncrement(),
-//                            Url = document.url,
-//                            displaySiteName = document.title,
-//                            datetime = document.datetime,
-//                        )
-//                    }
-//                    viewModel.getList(resultList)
-//                }
-                Log.d("비디오", response.body().toString())
+                val result = response.body()
+                result?.documents?.let { documents ->
+                    val resultList = documents.map { document ->
+                        SearchModel(
+                            id = setID.getAndIncrement(),
+                            Url = document.thumbnail,
+                            displaySiteName = document.title,
+                            datetime = document.datetime,
+                        )
+                    }
+                    viewModel.getList(resultList)
+                }
+//                Log.d("비디오", response.body().toString())
             }
             override fun onFailure(call: Call<ResultVideoModel>, t: Throwable) {
                 Log.d("Test", "통신실패")

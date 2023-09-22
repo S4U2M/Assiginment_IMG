@@ -49,6 +49,7 @@ class SearchViewModel(
         var currentList = searchList.value.orEmpty().toMutableList()
 //        currentList.clear()
         currentList = list.toMutableList()
+        currentList.addAll(list)
         _searchList.value = currentList
     }
 
