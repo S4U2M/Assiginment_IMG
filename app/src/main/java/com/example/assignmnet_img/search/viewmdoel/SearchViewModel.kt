@@ -47,7 +47,7 @@ class SearchViewModel(
 
     fun getList(list: List<SearchModel>) {
         var currentList = searchList.value.orEmpty().toMutableList()
-        currentList.clear()
+//        currentList.clear()
         currentList = list.toMutableList()
         _searchList.value = currentList
     }
