@@ -12,8 +12,6 @@ class SharedViewModel : ViewModel() {
     val liveSearchModel: MutableLiveData<SearchModel> = MutableLiveData()
     val liveBookMarkModel: MutableLiveData<BookmarkModel> = MutableLiveData()
 
-
-
     fun updateSearchModel(item: SearchModel) {
         liveSearchModel.value = item
     }
@@ -21,7 +19,5 @@ class SharedViewModel : ViewModel() {
     fun updateBookMarkModel(item: BookmarkModel) {
         liveBookMarkModel.value = item
     }
-
-
 
 }

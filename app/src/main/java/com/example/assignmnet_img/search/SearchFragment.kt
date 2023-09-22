@@ -177,10 +177,11 @@ class SearchFragment : Fragment() {
                 val result = response.body()
                 result?.documents?.let { documents ->
 
+
                     val resultList = documents.map { document ->
                         SearchModel(
                             id = setID.getAndIncrement(),
-                            imageUrl = document.image_url,
+                            Url = document.image_url,
                             displaySiteName = document.display_sitename,
                             datetime = document.datetime
                         )
@@ -234,5 +235,6 @@ class SearchFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
+
 
 }

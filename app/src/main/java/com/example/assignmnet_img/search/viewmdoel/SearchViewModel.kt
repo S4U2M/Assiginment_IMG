@@ -26,7 +26,7 @@ class SearchViewModel(
             return currentList.find {
                 it.id == item.id && //고유 아이디 비교
                         it.datetime == item.datetime && //혹시 모를 고유 아이디 부여가 꼬일 시 방어 기제로 상세한 비교
-                        it.imageUrl == item.imageUrl &&
+                        it.Url == item.Url &&
                         it.displaySiteName == item.displaySiteName
             }
         }

@@ -13,7 +13,7 @@ data class BookmarkModel(
 fun BookmarkModel.toSearchModel(): SearchModel {
     return SearchModel(
         id = id,
-        imageUrl = imageUrl,
+        Url = imageUrl,
         displaySiteName = displaySiteName,
         datetime = datetime,
         isBookmark = isBookmark
