@@ -11,13 +11,13 @@ import com.example.assignmnet_img.bookmark.provider.SharedProvider
 import com.example.assignmnet_img.bookmark.provider.SharedProviderImpl
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.retrofit.RetrofitClient
-import com.example.assignmnet_img.search.viewmdoel.repsitory.Repository
-import com.example.assignmnet_img.search.viewmdoel.repsitory.RepositoryImpl
+import com.example.assignmnet_img.search.viewmdoel.repsitory.SearchRepository
+import com.example.assignmnet_img.search.viewmdoel.repsitory.SearchRepositoryImpl
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val contextProvider: SharedProvider,
-    private val repository: Repository
+    private val repository: SearchRepository
 ) : ViewModel() {
 
     private val _searchList: MutableLiveData<List<SearchModel>> = MutableLiveData()
@@ -54,16 +54,27 @@ class SearchViewModel(
 
     }
 
+    private fun sortList(baseList:MutableList<SearchModel>):List<SearchModel>{
+        val sortedList = baseList.sortedByDescending { it.datetime }
+        return sortedList
+    }
+
     suspend fun doSearch(keyword:String){
+
         clearList()
+
         viewModelScope.launch {
+
             val resultImagesList = repository.getSearchedImages(keyword)
             val resultVideosList = repository.getSearchVideos(keyword)
+
             val currentList = searchList.value.orEmpty().toMutableList().apply {
                 addAll(resultImagesList)
                 addAll(resultVideosList)
             }
-            _searchList.value = currentList
+            val sortedList = sortList(currentList)
+
+            _searchList.value = sortedList
         }
     }
 
@@ -112,7 +123,7 @@ class SearchViewModelFactory(
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
             return SearchViewModel(
                 SharedProviderImpl(context),
-                RepositoryImpl(RetrofitClient)
+                SearchRepositoryImpl(RetrofitClient)
             ) as T
         } else {
             throw IllegalArgumentException("Not found ViewModel class.")

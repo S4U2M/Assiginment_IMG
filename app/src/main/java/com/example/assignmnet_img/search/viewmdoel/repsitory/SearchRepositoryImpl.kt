@@ -3,9 +3,11 @@ package com.example.assignmnet_img.search.viewmdoel.repsitory
 import com.example.assignmnet_img.search.dataclass.SearchModel
 import com.example.assignmnet_img.search.retrofit.RetrofitClient
 
-class RepositoryImpl(
+class SearchRepositoryImpl(
     private val client: RetrofitClient
-) : Repository {
+) : SearchRepository {
+
+    //데이터 영역
 
     override suspend fun getSearchedImages(text: String): List<SearchModel> {
         val responseImages = client.api.searchImage(text, "recency", 20)
