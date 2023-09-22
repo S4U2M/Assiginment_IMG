@@ -68,7 +68,7 @@ class SearchAdapter(
             // 앱의 캐시 데이터에 대해 생각해보자
 
             searchItemDate.text = item.datetime
-            searchItemTitle.text = item.displaySiteName
+            searchItemTitle.text = "${item.label}${item.title}"
 
             if (item.isBookmark) searchIvIsBookmark.visibility = View.VISIBLE
             else searchIvIsBookmark.visibility = View.INVISIBLE

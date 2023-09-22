@@ -6,7 +6,8 @@ data class SearchModel
     (
     val id: Long = -1,
     val Url: String,
-    val displaySiteName: String,
+    val label:String,
+    val title: String,
     val datetime: String,
     val isBookmark: Boolean = false
 )
@@ -15,7 +16,8 @@ fun SearchModel.toBookmarkModel(): BookmarkModel {
     return BookmarkModel(
         id = id,
         imageUrl = Url,
-        displaySiteName = displaySiteName,
+        label = label,
+        displaySiteName = title,
         datetime = datetime,
         isBookmark = isBookmark
     )

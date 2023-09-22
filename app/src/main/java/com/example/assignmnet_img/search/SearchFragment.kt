@@ -99,8 +99,7 @@ class SearchFragment : Fragment() {
 
         searchBtnClick.setOnClickListener {
             val text = searchEtText.text.toString()
-//            searchIMG(text)
-            searchVideo(text)
+            viewModel.doSearch(text)
             viewModel.updateText(text)
             Log.d("테스트2", "initViewModel: ${viewModel.searchList.value.toString()}")
         }
@@ -137,101 +136,8 @@ class SearchFragment : Fragment() {
 
     //id부여를 위한 변수
 
-    private val setID = AtomicLong(1L)
 
-    // 검색을 위한 메소드
-    private fun searchIMG(keyword: String) {
-        //OkhttpClient
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val request: Request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "KakaoAK ${API_KEY}")
-                .build()
-            chain.proceed(request)
-        }.build()
 
-        //retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
-
-        val api = retrofit.create(SearchApi::class.java)
-        val call = api.searchImage(keyword,"recency",40)
-
-        call.enqueue(object : Callback<ResultImgModel> {
-            override fun onResponse(
-                call: Call<ResultImgModel>,
-                response: Response<ResultImgModel>
-            ) {
-                val result = response.body()
-                result?.documents?.let { documents ->
-
-                    val resultList = documents.map { document ->
-                        SearchModel(
-                            id = setID.getAndIncrement(),
-                            Url = document.image_url,
-                            displaySiteName = document.display_sitename,
-                            datetime = document.datetime
-                        )
-                    }
-                    viewModel.getList(resultList)
-                }
-            }
-            override fun onFailure(call: Call<ResultImgModel>, t: Throwable) {
-                Log.d("Test", "통신실패")
-            }
-
-        })
-    }
-
-    //비디오 검색
-    private fun searchVideo(keyword: String) {
-        //OkhttpClient
-        val httpClient = OkHttpClient.Builder().addInterceptor { chain ->
-            val request: Request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "KakaoAK ${API_KEY}")
-                .build()
-            chain.proceed(request)
-        }.build()
-
-        //retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(httpClient)
-            .build()
-
-        val api = retrofit.create(SearchApi::class.java)
-        val call = api.searchVideo(keyword, "recency",40)
-
-        call.enqueue(object : Callback<ResultVideoModel> {
-            override fun onResponse(
-                call: Call<ResultVideoModel>,
-                response: Response<ResultVideoModel>
-            ) {
-                val result = response.body()
-                result?.documents?.let { documents ->
-                    val resultList = documents.map { document ->
-                        SearchModel(
-                            id = setID.getAndIncrement(),
-                            Url = document.thumbnail,
-                            displaySiteName = document.title,
-                            datetime = document.datetime,
-                        )
-                    }
-                    viewModel.getList(resultList)
-                }
-//                Log.d("비디오", response.body().toString())
-            }
-            override fun onFailure(call: Call<ResultVideoModel>, t: Throwable) {
-                Log.d("Test", "통신실패")
-            }
-
-        })
-    }
 
     private fun addAlterDialog(item: SearchModel) {
         val builder = AlertDialog.Builder(context)
