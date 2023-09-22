@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    val api : RetrofitInterface get() = instance.create(RetrofitInterface::class.java)
+    val api: RetrofitInterface get() = instance.create(RetrofitInterface::class.java)
 
     private val instance: Retrofit
         get() {
