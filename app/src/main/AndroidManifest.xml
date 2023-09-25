@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+
     <meta-data
         android:name="com.kakao.sdk.AppKey"
         android:value= "${kakao_native_key}"
