@@ -127,8 +127,6 @@ class SearchFragment : Fragment() {
     //id부여를 위한 변수
 
 
-
-
     private fun addAlterDialog(item: SearchModel) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("북마크 추가")

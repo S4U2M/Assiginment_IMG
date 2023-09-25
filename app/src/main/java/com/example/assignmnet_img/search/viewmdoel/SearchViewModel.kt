@@ -54,12 +54,12 @@ class SearchViewModel(
 
     }
 
-    private fun sortList(baseList:MutableList<SearchModel>):List<SearchModel>{
+    private fun sortList(baseList: MutableList<SearchModel>): List<SearchModel> {
         val sortedList = baseList.sortedByDescending { it.datetime }
         return sortedList
     }
 
-    suspend fun doSearch(keyword:String){
+    suspend fun doSearch(keyword: String) {
 
         clearList()
 

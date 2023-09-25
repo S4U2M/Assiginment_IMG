@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 interface SharedProvider {
     fun getSharedPreferences(name: String): SharedPreferences
 
-
 }
 
 class SharedProviderImpl(

@@ -4,7 +4,7 @@ import com.example.assignmnet_img.search.dataclass.SearchModel
 
 data class BookmarkModel(
     val imageUrl: String,
-    val label:String,
+    val label: String,
     val displaySiteName: String,
     val datetime: String,
     val isBookmark: Boolean = false

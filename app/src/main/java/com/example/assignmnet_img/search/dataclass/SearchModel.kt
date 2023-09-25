@@ -5,7 +5,7 @@ import com.example.assignmnet_img.bookmark.BookmarkModel
 data class SearchModel
     (
     val Url: String,
-    val label:String,
+    val label: String,
     val title: String,
     val datetime: String,
     val isBookmark: Boolean = false
